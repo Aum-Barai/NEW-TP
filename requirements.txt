@@ -1,0 +1,5 @@
+Flask==2.3.2
+ssdeep==3.4
+sdhash==3.5
+tlsh==4.5.0
+pymrsh==0.2.0

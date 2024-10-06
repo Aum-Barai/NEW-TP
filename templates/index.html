@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuzzy Hashing Similarity Analyzer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fuzzy Hashing Similarity Analyzer</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <label for="file1">File 1:</label>
+        <input type="file" id="file1" name="file1" required>
+        
+        <label for="file2">File 2:</label>
+        <input type="file" id="file2" name="file2" required>
+        
+        <button type="submit">Analyze Similarity</button>
+    </form>
+    
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('upload-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            try {
+                const response = await fetch('/', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    document.getElementById('result').innerHTML = `<p>Error: ${data.error}</p>`;
+                } else {
+                    document.getElementById('result').innerHTML = `
+                        <h2>Analysis Result</h2>
+                        <p>File 1: ${data.file1}</p>
+                        <p>File 2: ${data.file2}</p>
+                        <p>File Type: ${data.file_type}</p>
+                        <p>Algorithm Used: ${data.algorithm}</p>
+                        <p>Similarity: ${data.similarity}%</p>
+                    `;
+                }
+                
+                document.getElementById('result').style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').innerHTML = '<p>An error occurred. Please try again.</p>';
+                document.getElementById('result').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
